@@ -21,10 +21,8 @@ class Tw2TweenFactory(object):
     def __call__(self, request):
         self.reset(request)
         res = self.app(request.environ, self.start_response)
-        if isinstance(res, list) and len(res) == 1:
-            res = res[0]
-        assert isinstance(res, str)
-        return Response(res, self._status, self._headers)
+        return Response(status=self._status, headerlist=self._headers,
+                        app_iter=res)
 
     def wrapper(self, environ, start_response):
         response = self.handler(self._request)
